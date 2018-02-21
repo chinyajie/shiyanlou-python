@@ -90,7 +90,7 @@ class Calculator(Process):
     def run(self):
         while True:
             try:
-                item = self.__in_queue.get()
+                item = self.__in_queue.get(timeout=1)
             except queue.Empty:
                 return
             result = self.calculate(item)
@@ -127,7 +127,7 @@ class EmployeeData(Process):
 
 class Exporter(Process):
     def __init__(self, file, queue):
-        self.__file = open(file, 'a')
+        self.__file = open(file, 'w')
         self.__queue = queue
         super().__init__()
 
@@ -141,13 +141,13 @@ class Exporter(Process):
     def run(self):
         while True:
             try:
-                item = self.__queue.get()
+                item = self.__queue.get(timeout=1)
             except queue.Empty:
-                print("no_item")
+                #print("no_item")
                 self.__file.close() # VIP
                 return
             self.__file.write(item + '\n')
-            print("write" + item)
+            #print("write" + item)
 
 
 if __name__ == '__main__':
