@@ -4,6 +4,8 @@ import sys
 from multiprocessing import Process, Queue
 import queue
 from getopt import getopt, GetoptError
+import configparser
+from datetime import datetime
 
 
 class ArgError(Exception):
@@ -16,7 +18,8 @@ class Args:
 
     def __options(self, args):
         try:
-            opts, obj = getopt(args[1:], 'hC:c:d:o:', ['help'])
+            opts, obj = getopt(args, 'hC:c:d:o:', ['help'])
+            #opts, _ = getopt(sys.argv[1:], 'hC:c:d:o:', ['help'])
         except GetoptError:
             print('Parameter Error')
             exit()
@@ -60,41 +63,61 @@ class Calculator(Process):
         (0, 0.03, 0)
     ]
 
-    def __init__(self, file, in_queue, out_queue):
-        self.__rate, self.__jishu_high, self.__jishu_low = self.__parse_file(file)
+    def __init__(self, file, city, in_queue, out_queue):
         self.__in_queue = in_queue
         self.__out_queue = out_queue
+        self.__file = file
+        self.__city = city
+        self.config = self.__read_config()
         super().__init__()
 
-    def __parse_file(self, file):
-        rate = 0
-        jishu_high = 0
-        jishu_low = 0
-        with open(file) as f:
-            for line in f:
-                key, value = line.split('=')
-                key = key.strip()
-                try:
-                    value = float(value.strip())
-                except ValueError:
-                    continue
-                if key == 'JiShuL':
-                    jishu_low = value
-                elif key == 'JiShuH':
-                    jishu_high = value
-                else:
-                    rate += value
-        return rate, jishu_high, jishu_low
+    def __read_config(self):
+        config = configparser.ConfigParser()
+        config.read(self.__file)
+        if self.__city and self.__city.upper() in config.sections():
+            return config[args.city.upper()]
+        else:
+            return config['DEFAULT']
+
+
+    def _get_config(self, name):
+        try:
+            return float(self.config[name])
+        except (ValueError, KeyError):
+            print('Parameter Error')
+            exit()
+
+
+    @property
+    def social_insurance_baseline_low(self):
+        return self._get_config('JiShuL')
+
+
+    @property
+    def social_insurance_baseline_high(self):
+        return self._get_config('JiShuH')
+
+
+    @property
+    def social_insurance_total_rate(self):
+        return sum([
+            self._get_config('YangLao'),
+            self._get_config('YiLiao'),
+            self._get_config('ShiYe'),
+            self._get_config('GongShang'),
+            self._get_config('ShengYu'),
+            self._get_config('GongJiJin')
+        ])
 
     def calculate(self, data_item):
         employee_id, income = data_item
 
-        if income < self.__jishu_low:
-            shebao = self.__jishu_low * self.__rate
-        elif income > self.__jishu_high:
-            shebao = self.__jishu_high * self.__rate
+        if income < self.social_insurance_baseline_low:
+            shebao = self.social_insurance_baseline_low * self.social_insurance_total_rate
+        elif income > self.social_insurance_baseline_high:
+            shebao = self.social_insurance_baseline_high * self.social_insurance_total_rate
         else:
-            shebao = self.__rate * income
+            shebao = self.social_insurance_total_rate * income
 
         taxable = income - shebao - self.TAX_START
 
@@ -106,7 +129,8 @@ class Calculator(Process):
                     break
         final_income = income - shebao - tax
 
-        return "%d,%d,{:.2f},{:.2f},{:.2f}".format(shebao, tax, final_income) % (employee_id, income)
+        return "%d,%d,{:.2f},{:.2f},{:.2f},%s".format(shebao, tax, final_income) \
+               % (employee_id, income, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
     def run(self):
         while True:
@@ -177,8 +201,9 @@ if __name__ == '__main__':
     q1 = Queue()
     q2 = Queue()
 
-    calc = Calculator(args.config_path, q1, q2)
+
     employee_data = EmployeeData(args.userdata_path, q1)
+    calc = Calculator(args.config_path, args.city, q1, q2)
     exporter = Exporter(args.export_path, q2)
 
     employee_data.start()
