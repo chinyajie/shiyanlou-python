@@ -3,13 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 import json
 from datetime import datetime
-
+from pymongo import MongoClient
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/news'
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 db = SQLAlchemy(app)
+mongo = MongoClient('127.0.0.1', 27017).news
 
 '''
 文章表
@@ -58,6 +59,37 @@ class File(db.Model):
 
     def get_file_by_name(self, filename):
         return self._files.get(filename)
+
+    def add_tag(self, tag_name):
+        file = mongo.files.find_one({'file_id': self.id})
+        if file:
+            tags = file['tags']
+            if tag_name not in tags:
+                tags.append(tag_name)
+            mongo.files.update_one({'file_id': self.id}, {'$set': {'tags': tags}})
+        else:
+            tags = [tag_name]
+            mongo.files.insert_one({'file_id': self.id, 'tags': tags})
+        return tags
+
+    def remove_tag(self, tag_name):
+        file = mongo.files.find_one({'file_id': self.id})
+        if file:
+            tags = file['tags']
+            if tag_name in tags:
+                tags.remove(tag_name)
+                mongo.files.update_one({'file_id': self.id}, {'$set': {'tags': tags}})
+            return tags
+        return []
+
+    @property
+    def tags(self):
+        file_item = mongo.files.find_one({'file_id': self.id})
+        if file_item:
+            print(file_item)
+            return file_item['tags']
+        else:
+            return []
 
 
 class Category(db.Model):
