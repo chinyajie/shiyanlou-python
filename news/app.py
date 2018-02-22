@@ -42,6 +42,20 @@ class File(db.Model):
     def __repr__(self):
         return '<Article %s>' % self.title
 
+    def _read_all_files(self):
+        result = {}
+        for filename in os.listdir(self.directory):
+            file_path = os.path.join(self.directory, filename)
+            with open(file_path) as f:
+                result[filename[:-5]] = json.load(f)
+        return result
+
+    def get_title_list(self):
+        return [item['title'] for item in self._files.values()]
+
+    def get_file_by_name(self, filename):
+        return self._files.get(filename)
+
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -59,22 +73,7 @@ class Category(db.Model):
 # class Files(object):
 #     directory = os.path.join(os.path.abspath(os.path.dirname(__name__)), '..', 'files')
 #
-#     def __init__(self):
-#         self._files = self._read_all_files()
-#
-#     def _read_all_files(self):
-#         result = {}
-#         for filename in os.listdir(self.directory):
-#             file_path = os.path.join(self.directory, filename)
-#             with open(file_path) as f:
-#                 result[filename[:-5]] = json.load(f)
-#         return result
-#
-#     def get_title_list(self):
-#         return [item['title'] for item in self._files.values()]
-#
-#     def get_file_by_name(self, filename):
-#         return self._files.get(filename)
+
 #
 #
 # files = Files()
@@ -82,12 +81,12 @@ class Category(db.Model):
 
 @app.route('/')
 def index():
-    pass
+    return render_template("index.html", article_list=File.query.all())
 
 
-@app.route('/files/<filename>')
-def file(filename):
-    pass
+@app.route('/files/<int:file_id>')
+def file(file_id):
+    return render_template("file.html", artile=File.query.get_or_404(file_id))
 
 
 @app.errorhandler(404)
