@@ -2,6 +2,7 @@ from flask import abort, redirect, Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 import os
 import json
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -25,8 +26,10 @@ name：类别的名称（db.String(80)）
 
 
 class File(db.Model):
+    __tablename__ = 'files'
+
     id = db.Column(db.Integer, primary_key=True)
-    title = db.String(80)
+    title = db.Column(db.String(80), unique=True)
     created_time = db.Column(db.DateTime)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     content = db.Column(db.Text)
@@ -58,6 +61,8 @@ class File(db.Model):
 
 
 class Category(db.Model):
+    __tablename__ = 'categories'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     files = db.relationship('File') #enen
@@ -96,4 +101,4 @@ def not_found(error):
     return render_template('404.html'), 404
 
 if __name__ == '__main__':
-    app.run(port=3000)
+    app.run()
