@@ -24,14 +24,20 @@ name：类别的名称（db.String(80)）
 '''
 
 
-class Article(db.Model):
+class File(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.String(80)
     created_time = db.Column(db.DateTime)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     content = db.Column(db.Text)
     category = db.relationship('Category',
-                               backref=db.backref('articles', lazy='dynamic'))
+                               backref=db.backref('file', lazy='dynamic'))
+
+    def __init__(self, title, created_time, category, content):
+        self.title = title
+        self.created_time = created_time
+        self.category = category
+        self.content = content
 
     def __repr__(self):
         return '<Article %s>' % self.title
@@ -40,34 +46,38 @@ class Article(db.Model):
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
+    files = db.relationship('File') #enen
+
+    def __init__(self, name):
+        self.name = name
 
     def __repr__(self):
         return '<Category %s>' % self.name
 
 
-
-class Files(object):
-    directory = os.path.join(os.path.abspath(os.path.dirname(__name__)), '..', 'files')
-
-    def __init__(self):
-        self._files = self._read_all_files()
-
-    def _read_all_files(self):
-        result = {}
-        for filename in os.listdir(self.directory):
-            file_path = os.path.join(self.directory, filename)
-            with open(file_path) as f:
-                result[filename[:-5]] = json.load(f)
-        return result
-
-    def get_title_list(self):
-        return [item['title'] for item in self._files.values()]
-
-    def get_file_by_name(self, filename):
-        return self._files.get(filename)
-
-
-files = Files()
+#
+# class Files(object):
+#     directory = os.path.join(os.path.abspath(os.path.dirname(__name__)), '..', 'files')
+#
+#     def __init__(self):
+#         self._files = self._read_all_files()
+#
+#     def _read_all_files(self):
+#         result = {}
+#         for filename in os.listdir(self.directory):
+#             file_path = os.path.join(self.directory, filename)
+#             with open(file_path) as f:
+#                 result[filename[:-5]] = json.load(f)
+#         return result
+#
+#     def get_title_list(self):
+#         return [item['title'] for item in self._files.values()]
+#
+#     def get_file_by_name(self, filename):
+#         return self._files.get(filename)
+#
+#
+# files = Files()
 
 
 @app.route('/')
