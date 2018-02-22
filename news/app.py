@@ -1,9 +1,49 @@
 from flask import abort, redirect, Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
 import os
 import json
 
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/news'
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+
+db = SQLAlchemy(app)
+
+'''
+文章表
+id：文章的ID，主键约束（db.Integer）
+title: 文章名称（db.String(80)）
+created_time: 文章创建时间（db.DateTime）
+category_id: 文章的分类，外键约束（db.Integer, db.ForeignKey(...)）
+content: 文章的内容（db.Text）
+
+类别表包含下面的数据：
+id：类别的ID，主键约束（db.Integer）
+name：类别的名称（db.String(80)）
+'''
+
+
+class Article(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.String(80)
+    created_time = db.Column(db.DateTime)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    content = db.Column(db.Text)
+    category = db.relationship('Category',
+                               backref=db.backref('articles', lazy='dynamic'))
+
+    def __repr__(self):
+        return '<Article %s>' % self.title
+
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80))
+
+    def __repr__(self):
+        return '<Category %s>' % self.name
+
 
 
 class Files(object):
@@ -32,16 +72,12 @@ files = Files()
 
 @app.route('/')
 def index():
-    return render_template('index.html', title_list=files.get_title_list())
+    pass
 
 
 @app.route('/files/<filename>')
 def file(filename):
-    file_item = files.get_file_by_name(filename)
-    if file_item:
-        return render_template('file.html', article=files.get_file_by_name(filename))
-    else:
-        abort(404)
+    pass
 
 
 @app.errorhandler(404)
