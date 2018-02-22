@@ -39,7 +39,7 @@ class File(db.Model):
     def __init__(self, title, created_time, category, content):
         self.title = title
         self.created_time = created_time
-        self.category_id = category
+        self.category = category
         self.content = content
 
     def __repr__(self):
@@ -93,7 +93,7 @@ def index():
 
 @app.route('/files/<int:file_id>')
 def file(file_id):
-    return render_template("file.html", artile=File.query.get_or_404(file_id))
+    return render_template("file.html", article=File.query.get_or_404(file_id))
 
 
 @app.errorhandler(404)
