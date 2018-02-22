@@ -81,7 +81,9 @@ class Category(db.Model):
 
 @app.route('/')
 def index():
-    return render_template("index.html", article_list=File.query.all())
+    article_list = File.query.all()
+    print(article_list)
+    return render_template("index.html", article_list=article_list)
 
 
 @app.route('/files/<int:file_id>')
@@ -94,4 +96,4 @@ def not_found(error):
     return render_template('404.html'), 404
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=3000)
