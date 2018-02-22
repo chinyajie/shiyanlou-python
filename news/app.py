@@ -54,11 +54,6 @@ class File(db.Model):
                 result[filename[:-5]] = json.load(f)
         return result
 
-    def get_title_list(self):
-        return [item['title'] for item in self._files.values()]
-
-    def get_file_by_name(self, filename):
-        return self._files.get(filename)
 
     def add_tag(self, tag_name):
         file = mongo.files.find_one({'file_id': self.id})
@@ -119,7 +114,6 @@ class Category(db.Model):
 @app.route('/')
 def index():
     article_list = File.query.all()
-    print(article_list)
     return render_template("index.html", article_list=article_list)
 
 
