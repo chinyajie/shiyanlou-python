@@ -5,14 +5,15 @@
     <title>首页</title>
 </head>
 <body>
-    {% for item in article_list %}
-        <li>
-            <a href="{{ url_for('file', file_id=item.id) }}" target="_blank">{{ item.title }}</a>
-            {% for tag in item.tags %}
-                <span>{{tag}}</span>
-            {% endfor %}
-        </li>
-
-    {% endfor %}
+    <ul>
+        {% for item in article_list %}
+            <li>
+                <a href="{{ url_for('file', file_id=item.id) }}" target="_blank">{{ item.title }}</a>
+                {% for tag in item.tags %}
+                    <span>{{tag}}</span>
+                {% endfor %}
+            </li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
