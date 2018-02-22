@@ -26,7 +26,7 @@ name：类别的名称（db.String(80)）
 
 
 class File(db.Model):
-    __tablename__ = 'files'
+    __tablename__ = 'file'
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), unique=True)
@@ -61,7 +61,7 @@ class File(db.Model):
 
 
 class Category(db.Model):
-    __tablename__ = 'categories'
+    __tablename__ = 'category'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
