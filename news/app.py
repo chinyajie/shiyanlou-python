@@ -36,7 +36,7 @@ class File(db.Model):
     def __init__(self, title, created_time, category, content):
         self.title = title
         self.created_time = created_time
-        self.category = category
+        self.category_id = category
         self.content = content
 
     def __repr__(self):
