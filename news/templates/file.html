@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <title>article</title>
-</head>
-<body>
-<p>{{ article['title'] }}</p>>
-<p>{{ article['created_time'] }}</p>>
-<p>{{ article['content'] }}</p>>
+{% extends "base.html" %}
 
+{% block title %}File{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<h1>{{ file_item['title'] }}</h1>
+<p>{{ file_item['created_time'] }}</p>
+<p>{{ file_item['content'] }}</p>
+{% endblock %}
