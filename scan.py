@@ -16,10 +16,9 @@ def get_args():
     except(ValueError, IndexError):
         print("Parameter Error")
 
-    if len(port.split('.')) != 4:
+    if len(host.split('.')) != 4:
         print('Parameter Error')
         exit()
-    host = int(host)
         
     if '-' in port:
         port = port.split('-')
@@ -29,15 +28,15 @@ def get_args():
 
 def scan():
     host, ports = get_args()
-    for port in range(ports[0], ports[1]+1):
-        socket = socket.socket()
-        socket.settimeout(0.1)
+    for port in range(int(ports[0]), int(ports[1])+1):
+        sock = socket.socket()
+        sock.settimeout(0.1)
         
-        if socket.connect_ex(host, i) == 0:
-            print(i, 'open')
+        if sock.connect_ex((host, port)) == 0: #is (,)
+            print(port, 'open')
         else:
-            print(i, 'closed')
-        socket.close()
+            print(port, 'closed')
+        sock.close()
 
 if __name__ == '__main__':
     scan()
