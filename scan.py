@@ -13,18 +13,19 @@ def get_args():
 
         host = sys.argv[host_index + 1]
         port = sys.argv[port_index + 1]
+    except(ValueError, IndexError):
+        print("Parameter Error")
 
-        if len(port.split('.')) != 4:
-            print('Parameter Error')
-            exit()
-        host = int(host)
+    if len(port.split('.')) != 4:
+        print('Parameter Error')
+        exit()
+    host = int(host)
         
-        if '-' in port:
-            port = port.split('-')
-        else:
-            port = [port, port]
-        return host, port
-
+    if '-' in port:
+        port = port.split('-')
+    else:
+        port = [port, port]
+    return host, port
 
 def scan():
     host, ports = get_args()
