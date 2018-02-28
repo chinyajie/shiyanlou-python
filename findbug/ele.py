@@ -41,6 +41,6 @@ def ele_red_packet(number):
         s3_list.append(s3.status_code)
 
     if 200 in s3_list:
-        return "领取成功，{} 个红包已注入 {} 的饿了么账户!".format(len(s3_list), phone)
+        return f"领取成功，{len(s3_list)} 个红包已注入 {phone} 的饿了么账户!"
     else:
         return "红包领取失败！"
