@@ -21,6 +21,8 @@ class GithubSpider(scrapy.Spider):
             yield {
                 'name': repos.css('div[class="d-inline-block mb-1"] h3 a::text').extract_first().strip('\n').strip(),
                 'update_time': repos.css('relative-time::attr(datetime)').extract_first()
+                #'name': repository.xpath('.//a[@itemprop="name codeRepository"]/text()').re_first("\n\s*(.*)"),  #better
+                #'update_time': repository.xpath('.//relative-time/@datetime').extract_first()
             }
 
 
