@@ -9,7 +9,7 @@ class GithubRSpider(scrapy.Spider):
 
     @property
     def start_urls(slef):
-        url = 'http://github.com/{}'
+        url = "https://github.com/shiyanlou?page={}&tab=repositories"
         return (url.format(i) for i in range(1, 5)) 
 
     def parse(self, response):

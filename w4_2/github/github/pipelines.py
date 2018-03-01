@@ -10,8 +10,9 @@ from sqlalchemy.orm import sessionmaker
 from github.models import engine, Repository
 class GithubPipeline(object):
     def process_item(self, item, spider):
-        item['update_time'] = datetime.striptime(item['update_time'],
+        item['update_time'] = datetime.strptime(item['update_time'],
                 '%Y-%m-%dT%H:%M:%SZ')
+        print("hiahia")
         self.session.add(Repository(**item))
         return item
 
@@ -19,6 +20,6 @@ class GithubPipeline(object):
         Session = sessionmaker(bind=engine)
         self.session = Session()
 
-    def close_spide(self, spider):
+    def close_spider(self, spider):
         self.session.commit()
         self.session.close()
