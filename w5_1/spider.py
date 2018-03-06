@@ -21,7 +21,7 @@ def parse(response):
         item['username'] = comment.xpath('./div[@class="col-md-11 comment-item-body"]/div[@class="user-username"]'
                                          '/a[@class="username"]/text()').re_first('\n\s*(.*)\n')
         item['content'] = comment.xpath('./div[@class="col-md-11 comment-item-body"]/div'
-                                        '[@class="comment-item-content markdown-box"]/p/text()').re_first('\n\s*(.*)\n')
+                                        '[@class="comment-item-content markdown-box"]/p/text()').extract_first()
         results.append(item)
 
 
