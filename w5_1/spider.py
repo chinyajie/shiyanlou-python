@@ -29,9 +29,9 @@ def parse(response):
 def has_next_page(response):
     # 使用 xpath 提取数据来判断是否存在下一页
     # 返回 True 或者 False
-    flag = response.xpath("//*[@id='comments']/div/div[4]/ul/li[5]/class").extract_first()
+    flag = response.xpath("//*[@id='comments']/div/div[4]/ul/li[5]/@class").extract_first()
     print(flag)
-    if flag == response.xpath("//*[@id='comments']/div/div[4]/ul/li[5]/class").extract_first() == "disabled next-page":
+    if flag == "disabled next-page":
         return False
     else:
         return True
