@@ -12,7 +12,7 @@ class FlaskDocPipeline(object):
         """
         item['text'] = re.sub('\s+', ' ', item['text'])
 	
-        redis.lpush("flask_doc:items", json.dumps(dict(item)))
+        self.redis.lpush("flask_doc:items", json.dumps(dict(item)))
         return item
 
 def open_spider(self, spider):
