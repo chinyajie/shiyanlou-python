@@ -11,25 +11,36 @@ from selenium.webdriver.support import expected_conditions as EC
 # 存储爬取的结果
 results = []
 
+
 # 使用 xpath 解析评论数据
 def parse(response):
     for comment in response.css('div.comment-list-item'):
         # 使用 xpath 提取 HTML 里的评论者昵称 name 和评论内容 content
         # 并存入字典 result，然后将 result 添加到列表 results 中
-        TODO
-        results.append(result)
+        item = dict()
+        item['username'] = comment.xpath('./div[@class="col-md-11 comment-item-body"].div[@class="user-username"]'
+                                         '/a[@class="username"]/text()').re_first('\n\s*(.*)\n')
+        item['content'] = comment.xpath('./div[@class="col-md-11 comment-item-body"]/div'
+                                        '[@class="comment-item-content markdown-box"]/p/text()').re_first('\n\s*(.*)\n')
+        results.append(item)
+
 
 # 判断是否有下一页
 def has_next_page(response):
     # 使用 xpath 提取数据来判断是否存在下一页
     # 返回 True 或者 False
-    TODO
+    flag = response.xpath("//*[@id='comments']/div/div[4]/ul/li[5]/class").extract_first()
+    print(flag)
+    if flag == response.xpath("//*[@id='comments']/div/div[4]/ul/li[5]/class").extract_first() == "disabled next-page":
+        return False
+    else:
+        return True
 
 # 进入到下一页
 def goto_next_page(driver):
     # 使用 driver.find_element_by_xpath 获得下一页的按钮
     # 然后模拟按钮的 click() 操作进入到下一页
-    TODO
+    driver.find_element_by_xpath("//*[@id='comments']/div/div[4]/ul/li[5]/a").click()
 
 # 等待页面加载完成
 def wait_page_return(driver, page):
