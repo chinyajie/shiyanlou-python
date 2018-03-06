@@ -23,5 +23,6 @@ class FlaskDocPipeline(object):
 
     def close_spider(self, spider):
         # 关闭数据库连接
-        self.redis.close()
+        pass
+        #self.redis.close()
 
