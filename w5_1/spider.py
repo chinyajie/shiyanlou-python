@@ -18,7 +18,7 @@ def parse(response):
         # 使用 xpath 提取 HTML 里的评论者昵称 name 和评论内容 content
         # 并存入字典 result，然后将 result 添加到列表 results 中
         item = dict()
-        item['username'] = comment.xpath('./div[@class="col-md-11 comment-item-body"].div[@class="user-username"]'
+        item['username'] = comment.xpath('./div[@class="col-md-11 comment-item-body"]/div[@class="user-username"]'
                                          '/a[@class="username"]/text()').re_first('\n\s*(.*)\n')
         item['content'] = comment.xpath('./div[@class="col-md-11 comment-item-body"]/div'
                                         '[@class="comment-item-content markdown-box"]/p/text()').re_first('\n\s*(.*)\n')
