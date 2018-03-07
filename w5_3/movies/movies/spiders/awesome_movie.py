@@ -25,6 +25,7 @@ class AwesomeMovieSpider(scrapy.spiders.CrawlSpider):
                 'summary': response.xpath('//*[@id="link-report"]/span/text()').extract_first(),
                 'score': response.xpath('//*[@id="interest_sectl"]/div[1]/div[2]/strong/text()').extract_first()
             })
+        print(''.join(response.xpath('//text()').extract()))
         return item
 
     def parse_start_url(self, response):
