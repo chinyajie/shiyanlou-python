@@ -12,10 +12,10 @@ class AwesomeMovieSpider(scrapy.spiders.CrawlSpider):
     allowed_domains = ['movie.douban.com']
     start_urls = ['https://movie.douban.com/subject/3011091/']
 
-    linke = LinkExtractor(allow="https://movie.douban.com/subject/.*")
+    linke = LinkExtractor(allow=("https://movie.douban.com/subject/\d*",))
 
     rules = (
-        Rule(link_extractor=linke, callback="parse_page", follow=True),
+        Rule(link_extractor=linke, callback="parse_start_url", follow=True),
     )
 
     def parse_movie_item(self, response):
