@@ -1,11 +1,34 @@
 # -*- coding: utf-8 -*-
+
 import scrapy
+from scrapy.spiders import Rule
+from scrapy.linkextractors import LinkExtractor
+from movies.items import MovieItem
 
 
-class AwesomeMovieSpider(scrapy.Spider):
+class AwesomeMovieSpider(scrapy.spiders.CrawlSpider):
+
     name = 'awesome-movie'
     allowed_domains = ['movie.douban.com']
-    start_urls = ['http://movie.douban.com/']
+    start_urls = ['https://movie.douban.com/subject/3011091/']
 
-    def parse(self, response):
-        pass
+    linke = LinkExtractor(allow="https://movie.douban.com/subject/26649604/.*")
+
+    rules = (
+        Rule(link_extractor=linke, callback="parse_page", follow=True),
+    )
+
+    def parse_movie_item(self, response):
+        item = MovieItem({
+                'url': response.url,
+                'name': response.xpath('//*[@id="content"]/h1/span[1]/text()').extract_first(),
+                'summary': response.xpath('//*[@id="link-report"]/span/text()').extract_first(),
+                'score': response.xpath('//*[@id="interest_sectl"]/div[1]/div[2]/strong/text()').extract_first()
+            })
+        return item
+
+    def parse_start_url(self, response):
+        yield self.parse_movie_item(response)
+
+    def parse_page(self, response):
+        yield self.parse_movie_item(response)
