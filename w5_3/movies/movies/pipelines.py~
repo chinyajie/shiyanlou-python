@@ -14,12 +14,8 @@ class MoviesPipeline(object):
         """
         TODO: 将 item 结果以 JSON 形式保存到 Redis 数据库的 list 结构中
         """
- 
-        if item['name'] == None:
-            print("NNNNNN")
-        else:
-            print("!!!!!!!!!!"+item['name'])
-            self.redis.lpush("douban_movie:items", json.dumps(dict(item)))
+
+        self.redis.lpush("douban_movie:items", json.dumps(dict(item)))
         return item
 
     def open_spider(self, spider):

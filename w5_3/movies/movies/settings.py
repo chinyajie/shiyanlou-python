@@ -13,7 +13,7 @@ BOT_NAME = 'movies'
 
 SPIDER_MODULES = ['movies.spiders']
 NEWSPIDER_MODULE = 'movies.spiders'
-
+USER_AGENT = "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 " 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'movies (+http://www.yourdomain.com)'
