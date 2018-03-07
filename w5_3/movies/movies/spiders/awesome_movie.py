@@ -7,6 +7,7 @@ from movies.items import MovieItem
 
 
 class AwesomeMovieSpider(scrapy.spiders.CrawlSpider):
+    num = 1
 
     name = 'awesome-movie'
     allowed_domains = ['movie.douban.com']
@@ -25,6 +26,9 @@ class AwesomeMovieSpider(scrapy.spiders.CrawlSpider):
                 'summary': response.xpath('//*[@id="link-report"]/span/text()').extract_first(),
                 'score': response.xpath('//*[@id="interest_sectl"]/div[1]/div[2]/strong/text()').extract_first()
             })
+        self.num += 1
+        if self.num >= 100:
+            exit()
         #print(''.join(response.xpath('//text()').extract()))
         return item
 
