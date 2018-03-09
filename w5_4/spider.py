@@ -27,7 +27,7 @@ def parse(url, body):
     # 2. 使用 xpath 获取仓库的 name 和 update_time 数据
     # 3. 将提取的数据存入 results：results.append((name, update_time))
     response = HtmlResponse(url=url, body=body, encoding='utf-8')
-    for repos in response.css('li[class="col-12 d-block width-full py-4 border-bottom public source"]'):
+    for repos in response.css('li[class="col-12 d-block width-full py-4 border-bottom public source"], li[class="col-12 d-block width-full py-4 border-bottom public fork"]'):
         name = repos.css('div[class="d-inline-block mb-1"] h3 a::text').extract_first().strip('\n').strip()
         update_time = repos.css('relative-time::attr(datetime)').extract_first()
         results.append((name, update_time))

@@ -39,7 +39,7 @@ async def task(url):
         # 调用 fetch 获得 HTML 页面
         body = await fetch(session, url)
         # 调用 parse 解析页面并将获得的数据存入 results
-        await parse(url, body)
+        parse(url, body)
 
 
 # 主函数
