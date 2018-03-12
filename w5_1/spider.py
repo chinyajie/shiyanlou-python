@@ -18,7 +18,7 @@ def parse(response):
         # 使用 xpath 提取 HTML 里的评论者昵称 name 和评论内容 content
         # 并存入字典 result，然后将 result 添加到列表 results 中
         item = dict()
-        item['username'] = comment.xpath('./div[@class="col-md-11 comment-item-body"]/div[@class="user-username"]'
+        item['username'] = comment.xpath('./div[@class="col-md-11 comment-item-body"]/div[@class="user-username"]' # .很重要，不然就全局了
                                          '/a[@class="username"]/text()').re_first('\n\s*(.*)\n')
         item['content'] = comment.xpath('./div[@class="col-md-11 comment-item-body"]/div'
                                         '[@class="comment-item-content markdown-box"]/p/text()').extract_first()
@@ -31,7 +31,7 @@ def has_next_page(response):
     # 返回 True 或者 False
     flag = response.xpath("//*[@id='comments']/div/div[4]/ul/li[5]/@class").extract_first()
     print(flag)
-    if flag == "disabled next-page":
+    if flag == "disabled next-page": # disabled in flag
         return False
     else:
         return True

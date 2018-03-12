@@ -4,6 +4,7 @@ import scrapy
 from scrapy.spiders import Rule
 from scrapy.linkextractors import LinkExtractor
 from movies.items import MovieItem
+from scrapy.exceptions import CloseSpider
 
 
 class AwesomeMovieSpider(scrapy.spiders.CrawlSpider):
@@ -16,7 +17,7 @@ class AwesomeMovieSpider(scrapy.spiders.CrawlSpider):
     linke = LinkExtractor(allow=("https://movie.douban.com/subject/\d*",))
 
     rules = (
-        Rule(link_extractor=linke, callback="parse_start_url", follow=True),
+        Rule(link_extractor=linke, callback="parse_page", follow=True),
     )
 
     def parse_movie_item(self, response):
@@ -28,11 +29,13 @@ class AwesomeMovieSpider(scrapy.spiders.CrawlSpider):
             })
         self.num += 1
         if self.num >= 100:
-            exit()
+            raise CloseSpider('enough')
+            #exit()
         #print(''.join(response.xpath('//text()').extract()))
         return item
 
     def parse_start_url(self, response):
+        print("first_page")
         yield self.parse_movie_item(response)
 
     def parse_page(self, response):

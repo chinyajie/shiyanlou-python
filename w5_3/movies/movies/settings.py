@@ -53,9 +53,10 @@ ROBOTSTXT_OBEY = False
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'movies.middlewares.UserAgentMiddleware': 543,
+   'movies.middlewares.UserAgentMiddleware': 543, # 其实不用的写成None就可以
 }
 
+COOKIES_ENABLED = False
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
 #EXTENSIONS = {
@@ -72,9 +73,10 @@ ITEM_PIPELINES = {
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
 #The initial download delay
-AUTOTHROTTLE_START_DELAY = 10
+#AUTOTHROTTLE_START_DELAY = 10
 #The maximum download delay to be set in case of high latencies
-AUTOTHROTTLE_MAX_DELAY = 60
+#AUTOTHROTTLE_MAX_DELAY = 60
+DOWNLOAD_DELAY = 3
 # The average number of requests Scrapy should be sending in parallel to
 # each remote server
 #AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0

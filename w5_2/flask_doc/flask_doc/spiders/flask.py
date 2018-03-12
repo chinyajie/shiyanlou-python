@@ -18,7 +18,7 @@ class FlaskSpider(scrapy.spiders.CrawlSpider):
 
     def parse_page(self, response):
         raw = ''.join(response.xpath('//text()').extract())
-	# response.xpath('/html/body/div[1]/div[2]/div[1]/div/div/text()').extract_first()
+        # response.xpath('/html/body/div[1]/div[2]/div[1]/div/div/text()').extract_first()
         # re.sub(re.compile(r'<[^>]+>'), "", raw)
         # re.sub(re.compile('\s+'), "\s", raw)
 
