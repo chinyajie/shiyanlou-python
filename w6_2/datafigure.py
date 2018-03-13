@@ -11,7 +11,8 @@ x = np.arange(0, len(y), 1)
 ax.set_title('StudyData')
 ax.plot(x, y)
 
-
+ax.set_xlabel("User ID")
+ax.set_ylabel("Study Time")
 
 
 plt.show()
