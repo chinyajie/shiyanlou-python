@@ -9,7 +9,7 @@ y = data[['user_id','minutes']].groupby('user_id').sum()['minutes']
 x = np.arange(0, len(y), 1)
 
 ax.set_title('StudyData')
-ax.plot(x, y)
+ax.plot(x, y)  #可以ax.plot(redult.index, result.minutes;  result是data[['user_id','minutes']].groupby('user_id').sum()
 
 ax.set_xlabel("User ID")
 ax.set_ylabel("Study Time")

@@ -7,7 +7,7 @@ def analysis(file, user_id):
     minutes = 0
     data = pd.read_json(file)
     times = len(data[data['user_id']==user_id])
-    minutes =data[data['user_id']==user_id]['minutes'].sum()
+    minutes =data[data['user_id']==user_id]['minutes'].sum()  #用minurs可以直接用 .minutes; 其实也可以直接用groupby函数
     return times, minutes
 
 
