@@ -8,6 +8,24 @@ def co2():
     series_sheet = pd.read_excel("ClimateChange.xlsx", sheetname='Series')
 
 
+    data_sheet.fillna(method='ffill', axis=1).fillna(method='bfill', axis=1)
+    #data_sheet.set_index('Country name')
+
+    main_data = pd.merge(data_sheet, country_sheet)
+    main_data = main_data.replace({'..': 0})
+    #main_data.replace({'n/a': 0})
+
+    all = main_data[main_data['Series code']=='EN.ATM.CO2E.KT'][['Country code','Income group',1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011]]
+    num = all.drop('Country code',1);
+
+    all.set_index('Country code')
+    #num = num.replace({'..': '0'})
+
+    print(num)
+    print(num.sum(axis=1))
+    #print(all)
+
+
     '''
     补充代码：
     1. 查看数据文件结构。
@@ -20,4 +38,5 @@ def co2():
 
 
     # 必须返回最终得到的 DataFrame
-    return results
+    #return results
+co2()
