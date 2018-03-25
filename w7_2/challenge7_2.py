@@ -56,8 +56,8 @@ def co2_gdp_plot():
     gdpall['sum'] = gdpall[list(range(1990, 2012))].fillna(method='ffill', axis=1).fillna(method='bfill',
                                                                                           axis=1).replace(np.nan,
                                                                                                           0).sum(axis=1)
-    gdpall = gdpall.replace(np.nan, 0)
-    gdpall['sum'] = gdpall[list(range(1990, 2012))].fillna(method='ffill', axis=1).fillna(method='bfill', axis=1).sum(axis=1)
+    #gdpall = gdpall.replace(np.nan, 0)
+
     gdpall = gdpall[['sum', 'Country code']]
 
     # major_ticks = co2all['Country name']
@@ -96,7 +96,7 @@ def co2_gdp_plot():
 
     y = list(y)
     yy = list(yy)
-    china = ['%.3f' % y[a.index('CHN')], '%.3f' % yy[a.index('CHN')]]
+    china = [float('%.3f' % y[a.index('CHN')]), float('%.3f' % yy[a.index('CHN')])]
     print(china)
     plt.show()
     return fig, china
