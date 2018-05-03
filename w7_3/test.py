@@ -18,29 +18,37 @@ def climate_plot():
 
     # main_data = main_data.fillna(method='ffill', axis=1).fillna(method='bfill', axis=1)
 
-    all = data_sheet[data_sheet['Series code'] == 'EN.ATM.CO2E.KT' or data_sheet['Series code'] == 'EN.ATM.METH.KT.CE'
-                or data_sheet['Series code'] == 'EN.ATM.NOXE.KT.CE' or data_sheet['Series code'] == 'EN.ATM.GHGO.KT.CE'
-                or data_sheet['Series code'] == 'EN.CLC.GHGR.MT.CE']
+    green_gas = pd.concat([
+        data_sheet[data_sheet['Series code'] == 'EN.ATM.CO2E.KT' ],
+        data_sheet[data_sheet['Series code'] == 'EN.ATM.METH.KT.CE'],
+        data_sheet[data_sheet['Series code'] == 'EN.ATM.NOXE.KT.CE'],
+        data_sheet[data_sheet['Series code'] == 'EN.ATM.GHGO.KT.CE'],
+        data_sheet[data_sheet['Series code'] == 'EN.CLC.GHGR.MT.CE']])
 
     # sum = all[list(range(1990, 2012))].fillna(method='ffill', axis=1).fillna(method='bfill', axis=1).sum(axis=1)
-    all = all[list(range(1990, 2012))].fillna(method='ffill', axis=1).fillna(method='bfill', axis=1)
-    all = all.sum(axis=0)
-    print(type(all))
+    green_gas = green_gas[list(range(1990, 2012))].fillna(method='ffill', axis=1).fillna(method='bfill', axis=1)
+    green_gas = green_gas.sum(axis=0)
+    print(green_gas)
 
 
-    '''
-    补充代码：
-    1. 查看数据文件结构。
-    2. 读取数据并对缺失值处理
-    3. 对时间序列数据集进行处理并重新采样
-    4. 按规定选择数据
-    5. 按规定绘图
-    '''
+    fig = plt.figure()
 
-    # 务必在绘图前设置子图对象，并返回
-    #fig = plt.subplot()
+    ax1 = fig.add_subplot(2, 2, 1)
+    ax2 = fig.add_subplot(2, 2, 2)
+    ax3 = fig.add_subplot(2, 2, 3)
+    ax3 = fig.add_subplot(2, 2, 4)
 
-    # 返回 fig 对象
-    #return fig
+    x = range(len(green_gas))
+    y = green_gas
+
+    y = y.apply(lambda x: (x - min(y)) / (max(y) - min(y)))
+
+
+    ax1.plot(x, y, label="CO2-SUM")
+
+    ax1.legend()
+    plt.show()
+
+
 
 climate_plot()
