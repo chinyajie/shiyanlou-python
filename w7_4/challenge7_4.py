@@ -8,9 +8,9 @@ def Temperature():
     df_GlobalSurfaceTemperature = pd.read_csv('GlobalSurfaceTemperature.csv', header=0)
     df_CO2ppm = pd.read_csv('CO2ppm.csv')
 
-    df_GreenhouseGas_new = pd.DataFrame(df_GreenhouseGas[['N20', 'CH4', 'CO2']].values,
+    df_GreenhouseGas_new = pd.DataFrame(df_GreenhouseGas[['N2O', 'CH4', 'CO2']].values,
                                         index=pd.to_datetime(df_GreenhouseGas['Year'].astype(str)),
-                                        columns=['N20', 'CH4', 'CO2'])
+                                        columns=['N2O', 'CH4', 'CO2'])
     df_GlobalSurfaceTemperature_new = pd.DataFrame(df_GlobalSurfaceTemperature[['Median', 'Upper', 'Lower']].values,
                                                    index=pd.to_datetime(df_GlobalSurfaceTemperature['Year'].astype(str)),
                                                    columns=['Median', 'Upper', 'Lower'])
@@ -44,5 +44,7 @@ def Temperature():
     model_Lower = LinearRegression()
     model_Lower.fit(feature_train, target_Lower_train)
     Lower_predictions = model_Lower.predict(feature_test)
-
+    print(list(Upper_predictions), list(Median_predictions), list(Lower_predictions))
     return list(Upper_predictions), list(Median_predictions), list(Lower_predictions)
+
+Temperature()
