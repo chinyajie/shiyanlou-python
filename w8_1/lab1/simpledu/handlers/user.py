@@ -11,4 +11,4 @@ def admin_index():
 
 @user.route('<string:user_name>')
 def user(user_name):
-    return render_template("user.html", user=User.query.get_or_404(user_name))
+    return render_template("user.html", user=User.query.get_or_404(username=user_name))
