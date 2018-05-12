@@ -9,7 +9,7 @@
 <h1>Username: {{ user.username }}</h1>
 <h1>Published courses:</h1>
 {%for courses in user.publish_courses %}
-{{courses.name}}<br/>
+{{courses.name}}
 {%endfor%}
  
 {% endblock %}
