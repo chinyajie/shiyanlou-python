@@ -14,7 +14,7 @@ def index():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(username=form.username.data).first()
         login_user(user, form.remember_me.data)
         return redirect(url_for('.index'))
     return render_template('login.html', form=form)
@@ -30,8 +30,12 @@ def logout():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
+        if not form.username.data.isalnum():
+            flash('用户名只能由字母和数字组成')
+            return redirect(url_for('.register'))
         form.create_user()
         flash('register success', 'success')
         return redirect(url_for('.login'))
     return render_template('register.html', form=form)
+
 
