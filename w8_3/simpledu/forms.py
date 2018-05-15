@@ -69,3 +69,4 @@ class CourseForm(FlaskForm):
         db.session.add(course)
         db.session.commit()
         return course
+
