@@ -62,7 +62,7 @@ def users():
 
 @admin.route('/users/create', methods=['GET', 'POST'])
 @admin_required
-def create_users():
+def create_user():
     form = RegisterForm()
     if form.validate_on_submit():
         form.create_user()
