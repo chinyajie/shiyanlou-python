@@ -70,3 +70,18 @@ class CourseForm(FlaskForm):
         db.session.commit()
         return course
 
+class LiveForm(FlaskForm):
+    name = StringField('直播名称', validators=[Required(), Length(1, 128)])
+    user_id = IntegerField('直播用户ID', validators=[Required(), NumberRange(min=1, message='无效的用户')])
+    submit = SubmitField('提交')
+
+    def validate_user_id(self, field):
+        if not User.query.get(self.user_id.data):
+            raise ValidationError('用户不存在')
+
+    def create_live(self):
+        live = Live()
+        self.populate_obj(live)
+        db.session.add(live)
+        db.session.commit()
+        return Live

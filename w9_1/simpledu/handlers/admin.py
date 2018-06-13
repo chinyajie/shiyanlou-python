@@ -102,3 +102,25 @@ def delete_user(user_id):
     db.session.commit()
     flash('用户删除成功', 'success')
     return redirect(url_for('admin.users'))
+
+@admin.route('/lives')
+@admin_required
+def lives():
+    page = request.args.get('page', default=1, type=int)
+    pagination = Live.query.paginate(
+        page=page,
+        per_page=current_app.config['ADMIN_PER_PAGE'],
+        error_out=False
+    )
+    return render_template('admin/lives.html', pagination=pagination)
+
+
+@admin.route('/lives/create', methods=['GET', 'POST'])
+@admin_required
+def create_live():
+    form = LiveForm()
+    if form.validate_on_submit():
+        form.create_live()
+        flash('直播创建成功', 'success')
+        return redirect(url_for('admin.lives'))
+    return render_template('admin/create_live.html', form=form)
