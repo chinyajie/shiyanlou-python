@@ -1,5 +1,4 @@
-from flask import Blueprint, render_template ,redirect, url_for,
-redirect, url_for, flash
+from flask import Blueprint, render_template ,redirect, url_for, redirect, url_for, flash
 from simpledu.decorators import admin_required
 from simpledu.models import Course
 from simpledu.forms import CourseForm, MessageForm
