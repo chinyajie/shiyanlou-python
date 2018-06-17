@@ -13,7 +13,7 @@ def index():
     return render_template('live/index.html')
 
 @live.route('/systemmessage', methods=['GET', 'POST'])
-def message():
+def systemmessage():
     form = MessageForm()
     if form.validate_on_submit():
         redis.publish('chat', json.dumps(dict(
@@ -21,5 +21,5 @@ def message():
             text=form.text.data
         )))
         flash('系统消息发送成功', 'success')
-        return redirect(url_for('live.message'))
+        return redirect(url_for('live.systemmessage'))
     return render_template('admin/message.html', form=form)
