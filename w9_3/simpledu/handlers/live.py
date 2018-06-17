@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template
+from .admin import send_message
 
 live = Blueprint('live', __name__, url_prefix='/live')
 
@@ -7,8 +8,7 @@ live = Blueprint('live', __name__, url_prefix='/live')
 def index():
     return render_template('live/index.html')
 
-
-@live.route('/systemmessage')
+@live.route('/systemmessage', methods=['GET', 'POST'])
 def message():
-    return render_template('admin/message.html')
+    send_message()
 
