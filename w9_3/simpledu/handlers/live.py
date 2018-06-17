@@ -21,5 +21,5 @@ def message():
             text=form.text.data
         )))
         flash('系统消息发送成功', 'success')
-        return redirect(url_for('admin.index'))
+        return redirect(url_for('live.message'))
     return render_template('admin/message.html', form=form)
