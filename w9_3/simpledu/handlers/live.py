@@ -9,6 +9,6 @@ def index():
 
 
 @live.route('/systemmessage')
-def index():
+def message():
     return render_template('admin/message.html')
 
